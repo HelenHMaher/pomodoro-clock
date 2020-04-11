@@ -7,7 +7,7 @@ import TimerControl from "./TimerControl";
 export const App = () => {
   const [breakLength, setBreakLength] = useState(5);
   const [sessionLength, setSessionLength] = useState(25);
-  const [timerState, setTimerState] = useState("stopped");
+  const [timerRunning, setRunning] = useState(false);
   const [timerType, setTimerType] = useState("session");
   const [timerTime, setTimerTime] = useState(1500);
 
@@ -23,13 +23,13 @@ export const App = () => {
     );
 
   const lengthControl = (breakSession, sign, currentLength, setFunction) => {
-    if (timerState === "stopped" && timerType !== breakSession) {
+    if (timerRunning === false && timerType !== breakSession) {
       if (sign === "-" && currentLength > 1) {
         setFunction(currentLength - 1);
       } else if (sign === "+" && currentLength < 60) {
         setFunction(currentLength + 1);
       }
-    } else if (timerState === "stopped" && timerType === breakSession) {
+    } else if (timerRunning === false && timerType === breakSession) {
       if (sign === "-" && currentLength > 1) {
         setFunction(currentLength - 1);
         setTimerTime(timerTime - 60);
@@ -40,6 +40,32 @@ export const App = () => {
     } else {
       return;
     }
+  };
+
+  const handlePlayPause = () => {
+    setRunning(!timerRunning);
+  };
+
+  const handleReset = () => {
+    setBreakLength(5);
+    setSessionLength(25);
+    setRunning(false);
+    setTimerType("session");
+    setTimerTime(1500);
+  };
+
+  const startTimer = () => {
+    const start = new Date().getTime();
+    let elapsed = "0.0";
+
+    window.setInterval(() => {
+      const time = new Date().getTime() - start;
+      elapsed = Math.floor(time / 100) / 10;
+      if (Math.round(elapsed) === elapsed) {
+        elapsed += ".0";
+      }
+      document.title = elapsed;
+    }, 100);
   };
 
   return (
@@ -67,7 +93,10 @@ export const App = () => {
           handleClick={breakLengthControl}
         />
         <TimerFace timerType={timerType} clock="--" />
-        <TimerControl handlePlayPause="--" handleReset="--" />
+        <TimerControl
+          handlePlayPause={handlePlayPause}
+          handleReset={handleReset}
+        />
       </div>
       <footer className="App-footer">
         <p>Helen Maher 2020</p>

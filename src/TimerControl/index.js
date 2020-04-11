@@ -5,12 +5,12 @@ export const TimerControl = (props) => {
   const { handlePlayPause, handleReset } = props;
   return (
     <div className="timer-control">
-      <div id="start_stop" onClick={handlePlayPause}>
+      <button id="start_stop" onClick={handlePlayPause}>
         Play/Pause
-      </div>
-      <div id="reset" onClick={handleReset}>
+      </button>
+      <button id="reset" onClick={handleReset}>
         Reset
-      </div>
+      </button>
     </div>
   );
 };
