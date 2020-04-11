@@ -43,7 +43,12 @@ export const App = () => {
   };
 
   const handlePlayPause = () => {
-    setRunning(!timerRunning);
+    if (!timerRunning) {
+      setRunning(true);
+      startTimer();
+    } else {
+      setRunning(false);
+    }
   };
 
   const handleReset = () => {
@@ -55,17 +60,19 @@ export const App = () => {
   };
 
   const startTimer = () => {
-    const start = new Date().getTime();
-    let elapsed = "0.0";
+    while (timerRunning) {
+      const start = new Date().getTime();
+      let elapsed = "0.0";
 
-    window.setInterval(() => {
-      const time = new Date().getTime() - start;
-      elapsed = Math.floor(time / 100) / 10;
-      if (Math.round(elapsed) === elapsed) {
-        elapsed += ".0";
-      }
-      document.title = elapsed;
-    }, 100);
+      window.setInterval(() => {
+        const time = new Date().getTime() - start;
+        elapsed = Math.floor(time / 100) / 10;
+        if (Math.round(elapsed) === elapsed) {
+          elapsed += ".0";
+        }
+        document.title = elapsed;
+      }, 100);
+    }
   };
 
   return (
