@@ -13,15 +13,24 @@ export const App = () => {
 
   useEffect(() => {
     let startTimer = null;
-    if (timerRunning && timerTime !== 0) {
+    if (timerRunning && timerTime >= 0) {
       startTimer = setInterval(() => {
         setTimerTime((timerTime) => timerTime - 1);
       }, 1000);
-    } else if (!timerRunning || timerTime === 0) {
+    }
+    if (timerTime < 0) {
+      if (timerType === "session") {
+        setTimerType("break");
+        setTimerTime(breakLength * 60);
+      } else {
+        setTimerType("session");
+        setTimerTime(sessionLength * 60);
+      }
+    } else if (!timerRunning) {
       clearInterval(startTimer);
     }
     return () => clearInterval(startTimer);
-  }, [timerRunning, timerTime]);
+  }, [timerRunning, timerTime, timerType, breakLength, sessionLength]);
 
   const breakLengthControl = (e) =>
     lengthControl("break", e.currentTarget.value, breakLength, setBreakLength);
