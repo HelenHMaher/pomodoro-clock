@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import LengthControl from "./LengthControl";
 import TimerFace from "./TimerFace";
@@ -10,6 +10,18 @@ export const App = () => {
   const [timerRunning, setRunning] = useState(false);
   const [timerType, setTimerType] = useState("session");
   const [timerTime, setTimerTime] = useState(1500);
+
+  useEffect(() => {
+    let startTimer = null;
+    if (timerRunning && timerTime !== 0) {
+      startTimer = setInterval(() => {
+        setTimerTime((timerTime) => timerTime - 1);
+      }, 1000);
+    } else if (!timerRunning || timerTime === 0) {
+      clearInterval(startTimer);
+    }
+    return () => clearInterval(startTimer);
+  }, [timerRunning, timerTime]);
 
   const breakLengthControl = (e) =>
     lengthControl("break", e.currentTarget.value, breakLength, setBreakLength);
@@ -42,15 +54,6 @@ export const App = () => {
     }
   };
 
-  const handlePlayPause = () => {
-    if (!timerRunning) {
-      setRunning(true);
-      startTimer();
-    } else {
-      setRunning(false);
-    }
-  };
-
   const handleReset = () => {
     setBreakLength(5);
     setSessionLength(25);
@@ -59,20 +62,8 @@ export const App = () => {
     setTimerTime(1500);
   };
 
-  const startTimer = () => {
-    while (timerRunning) {
-      const start = new Date().getTime();
-      let elapsed = "0.0";
-
-      window.setInterval(() => {
-        const time = new Date().getTime() - start;
-        elapsed = Math.floor(time / 100) / 10;
-        if (Math.round(elapsed) === elapsed) {
-          elapsed += ".0";
-        }
-        document.title = elapsed;
-      }, 100);
-    }
+  const toggle = () => {
+    setRunning(!timerRunning);
   };
 
   return (
@@ -91,7 +82,7 @@ export const App = () => {
           handleClick={sessionLengthControl}
         />
         <LengthControl
-          labelID="break-length"
+          labelID="break-label"
           label="Break Length"
           decrementID="break-decrement"
           incrementID="break-increment"
@@ -99,11 +90,8 @@ export const App = () => {
           length={breakLength}
           handleClick={breakLengthControl}
         />
-        <TimerFace timerType={timerType} clock="--" />
-        <TimerControl
-          handlePlayPause={handlePlayPause}
-          handleReset={handleReset}
-        />
+        <TimerFace timerType={timerType} clock={timerTime} />
+        <TimerControl handlePlayPause={toggle} handleReset={handleReset} />
       </div>
       <footer className="App-footer">
         <p>Helen Maher 2020</p>
