@@ -21,7 +21,7 @@ export const LengthControl = (props) => {
           onClick={handleClick}
           value="+"
         >
-          +
+          &#43;
         </button>
         <div className="control-elements" id={lengthID}>
           {length}
@@ -32,7 +32,7 @@ export const LengthControl = (props) => {
           onClick={handleClick}
           value="-"
         >
-          -
+          &#8722;
         </button>
       </div>
     </div>
