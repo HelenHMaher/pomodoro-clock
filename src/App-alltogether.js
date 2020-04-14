@@ -1,30 +1,26 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import LengthControl from "./LengthControl";
-import TimerFace from "./TimerFace";
-import TimerControl from "./TimerControl";
-import Sound from "./Sound";
 
 export const App = () => {
   const [breakLength, setBreakLength] = useState(5);
   const [sessionLength, setSessionLength] = useState(25);
   const [timerRunning, setRunning] = useState(false);
-  const [timerType, setTimerType] = useState("Session");
+  const [timerType, setTimerType] = useState("session");
   const [timerTime, setTimerTime] = useState(1500);
 
   useEffect(() => {
     let startTimer = null;
-    if (timerRunning && timerTime > 0) {
+    if (timerRunning && timerTime >= 0) {
       startTimer = setInterval(() => {
         setTimerTime((timerTime) => timerTime - 1);
       }, 1000);
     }
-    if (timerTime <= 0) {
-      if (timerType === "Session") {
-        setTimerType("Break");
+    if (timerTime < 0) {
+      if (timerType === "session") {
+        setTimerType("break");
         setTimerTime(breakLength * 60);
-      } else if (timerType === "Break") {
-        setTimerType("Session");
+      } else if (timerType === "break") {
+        setTimerType("session");
         setTimerTime(sessionLength * 60);
       }
     } else if (!timerRunning) {
@@ -33,19 +29,12 @@ export const App = () => {
     return () => clearInterval(startTimer);
   }, [timerRunning, timerTime, timerType, breakLength, sessionLength]);
 
-  useEffect(() => {
-    if (timerTime === 0) {
-      const sound = document.getElementById("beep");
-      sound.play();
-    }
-  }, [timerTime]);
-
   const breakLengthControl = (e) =>
-    lengthControl("Break", e.currentTarget.value, breakLength, setBreakLength);
+    lengthControl("break", e.currentTarget.value, breakLength, setBreakLength);
 
   const sessionLengthControl = (e) =>
     lengthControl(
-      "Session",
+      "session",
       e.currentTarget.value,
       sessionLength,
       setSessionLength
@@ -72,18 +61,38 @@ export const App = () => {
   };
 
   const handleReset = () => {
-    const sound = document.getElementById("beep");
     setBreakLength(5);
     setSessionLength(25);
     setRunning(false);
+    setTimerType("session");
     setTimerTime(1500);
-    setTimerType("Session");
-    sound.pause();
-    sound.currentTime = 0;
   };
 
   const toggle = () => {
     setRunning(!timerRunning);
+  };
+
+  const toClock = () => {
+    let minutes = Math.floor(timerTime / 60);
+    let seconds = timerTime - minutes * 60;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    return minutes + ":" + seconds;
+  };
+
+  const LengthControl = (props) => {
+    return (
+      <div className="length-control">
+        <div id={props.labelID}>{props.label}</div>
+        <button id={props.incrementID} onClick={props.handleClick} value="+">
+          +
+        </button>
+        <div id={props.lengthID}>{props.length}</div>
+        <button id={props.decrementID} onClick={props.handleClick} value="-">
+          -
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -110,9 +119,18 @@ export const App = () => {
           length={breakLength}
           handleClick={breakLengthControl}
         />
-        <TimerFace timerType={timerType} clock={timerTime} />
-        <TimerControl handlePlayPause={toggle} handleReset={handleReset} />
-        <Sound />
+        <div className="timer-face">
+          <div id="timer-label">{timerType}</div>
+          <div id="time-left">{toClock()}</div>
+        </div>
+        <div className="timer-control">
+          <button id="start_stop" onClick={toggle}>
+            Play/Pause
+          </button>
+          <button id="reset" onClick={handleReset}>
+            Reset
+          </button>
+        </div>
       </div>
       <footer className="App-footer">
         <p>Helen Maher 2020</p>
