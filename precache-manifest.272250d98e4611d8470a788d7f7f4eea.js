@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "219256d53281e3a1d5d5d1588c6ac19f",
+    "revision": "d570c3e3dc532611a1195e12227af750",
     "url": "/pomodoro-clock/index.html"
   },
   {
