@@ -22,7 +22,7 @@ export const App = () => {
       if (timerType === "session") {
         setTimerType("break");
         setTimerTime(breakLength * 60);
-      } else {
+      } else if (timerType === "break") {
         setTimerType("session");
         setTimerTime(sessionLength * 60);
       }
