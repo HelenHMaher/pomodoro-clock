@@ -14,13 +14,27 @@ export const LengthControl = (props) => {
   return (
     <div className="length-control">
       <div id={labelID}>{label}</div>
-      <button id={incrementID} onClick={handleClick} value="+">
-        +
-      </button>
-      <div id={lengthID}>{length}</div>
-      <button id={decrementID} onClick={handleClick} value="-">
-        -
-      </button>
+      <div className="controls">
+        <button
+          className="control-elements"
+          id={incrementID}
+          onClick={handleClick}
+          value="+"
+        >
+          +
+        </button>
+        <div className="control-elements" id={lengthID}>
+          {length}
+        </div>
+        <button
+          className="control-elements"
+          id={decrementID}
+          onClick={handleClick}
+          value="-"
+        >
+          -
+        </button>
+      </div>
     </div>
   );
 };

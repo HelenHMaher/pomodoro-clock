@@ -1,3 +1,108 @@
-.App {
+:root {
+  --mainDark: #005b32;
+  --mainGreen: #80b31e;
+  --accentYellow: #e6f487;
+  --accentRed: #e34429;
+}
+body {
+  display: flex;
   text-align: center;
+  background: var(--mainDark);
+  justify-content: center;
+}
+
+button {
+  background: var(--accentYellow);
+  border: 2px solid var(--mainDark);
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: "Baloo Bhai 2", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  color: var(--mainGreen);
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+}
+
+button:hover {
+  box-shadow: 4px 4px 4px var(--mainDark);
+}
+
+button:focus {
+  outline: none;
+}
+
+#start_stop {
+  width: 150px;
+  margin-right: 40px;
+}
+
+#reset {
+  width: 100px;
+  margin-top: 20px;
+}
+
+.App {
+  position: relative;
+  height: 475px;
+  width: 600px;
+  background: var(--accentYellow);
+  border-radius: 20px;
+}
+.App-header {
+  line-height: 80px;
+  height: 70px;
+  width: 100%;
+  font-size: 50px;
+  position: relative;
+}
+
+.clock-wrapper {
+  width: 600px;
+  height: 350px;
+  border-bottom: 2px solid var(--mainDark);
+  border-top: 2px solid var(--mainDark);
+  background: var(--mainGreen);
+}
+
+.length-control {
+  font-size: 20px;
+  line-height: 20px;
+  margin: 10px;
+  display: inline-block;
+}
+.control-elements {
+  display: inline-block;
+  margin: 10px;
+  font-size: 40px;
+  line-height: 40px;
+}
+
+.timer-face {
+  background: var(--accentRed);
+  margin: auto;
+  border: 2px solid var(--mainDark);
+  border-radius: 20px;
+  height: 150px;
+  width: 200px;
+}
+#timer-label {
+  font-size: 30px;
+  line-height: 40px;
+}
+
+#time-left {
+  display: absolute;
+  font-size: 60px;
+}
+
+.App-footer {
+  text-justify: center;
+  width: 100%;
+}
+
+@media screen and (max-width: 650px) {
+  .App {
+    transform: scale(0.6);
+  }
 }
